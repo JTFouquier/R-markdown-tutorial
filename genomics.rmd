@@ -1,0 +1,51 @@
+---
+title: "Genomics"
+author: "Marian L. Schmidt, NGS 2015 Tutorial"
+date: "6/25/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+
+```{r Set the seed, include=TRUE, echo=TRUE, eval = TRUE}
+set.seed(0.11) # Insert your random number here 
+```
+
+## Importing Data
+```{r Import Data, echo = TRUE, eval = TRUE}
+metadata <- read.csv('EcoliMetadata.csv') # Load in the data from the data directory!
+head(metadata) # This will show us the first 6 rows of the dataframe
+str(metadata) # This will show us the structure of the data
+mean(metadata$genome_size) # Calculate the mean genome_size
+```
+
+## Make Some Plots
+###  Plot 1:  Let's look at the distribution of the genome size
+```{r Plot1, echo = TRUE, eval = TRUE, fig.center = TRUE}
+ggplot(metadata, aes(x = genome_size)) +
+  geom_bar(stat = "bin", binwidth=0.01) # create a bar plot (histogram) with bins by a genome size of 0.01
+```
+
+### Plot 2:  Looking at all of the genome sizes for each strain
+```{r Plot2, echo = TRUE, eval = TRUE, fig.center = TRUE}
+ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) + # we are going to make points
+  theme(axis.text.x = element_text(angle=45, hjust=1)) # x-axis text on a 45 degree angle 
+```
+
+### Plot 3: Taking the average genome size for the types of E.coli mutants
+```{r Plot3, echo = TRUE, eval = TRUE, fig.center = TRUE}
+ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) + # plot time 
+  geom_boxplot() + # make it a boxplot
+  ggtitle('Boxplot of genome size by citrate mutant type') + #add a title
+  xlab('citrate mutant') + # add x axis label
+  ylab('genome size') + #add y axis label
+  theme(axis.text.x = element_text(angle=45, hjust=1), # put x axis text on a 45 degree angle
+          axis.title = element_text(size = rel(1.5)), #make the relative size of the axis title text
+          axis.text = element_text(size = rel(1.25))) #make the relative size of the axis text
+```
+          
